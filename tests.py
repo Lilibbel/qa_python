@@ -1,5 +1,3 @@
-from main import BooksCollector
-import pytest
 # класс TestBooksCollector объединяет набор тестов, которыми мы покрываем наше приложение BooksCollector
 # обязательно указывать префикс Test
 class TestBooksCollector:
@@ -8,9 +6,7 @@ class TestBooksCollector:
     # обязательно указывать префикс test_
     # дальше идет название метода, который тестируем add_new_book_
     # затем, что тестируем add_two_books - добавление двух книг
-    def test_add_new_book_add_two_books(self):
-        # создаем экземпляр (объект) класса BooksCollector
-        collector = BooksCollector()
+    def test_add_new_book_add_two_books(self,collector):
 
         # добавляем две книги
         collector.add_new_book('Гордость и предубеждение и зомби')
@@ -19,13 +15,11 @@ class TestBooksCollector:
         # проверяем, что добавилось именно две
         # словарь books_rating, который нам возвращает метод get_books_rating, имеет длину 2
         assert len(collector.books_genre) == 2
+        assert 'Гордость и предубеждение и зомби' in collector.books_genre
+        assert 'Что делать, если ваш кот хочет вас убить' in collector.books_genre
 
     # напиши свои тесты ниже
     # чтобы тесты были независимыми в каждом из них создавай отдельный экземпляр класса BooksCollector()
-
-    @pytest.fixture
-    def collector(self):
-        return BooksCollector()
 
     # добавление новой книги (длина 15, 0, 70 и дубликаты)
     def test_add_new_book(self,collector):
@@ -137,3 +131,10 @@ class TestBooksCollector:
     # получаем список Избранных книг
     def test_get_list_of_favorites_books(self,collector):
         assert collector.get_list_of_favorites_books() == []
+
+    def test_get_list_of_favorites_books_empty(self,collector):
+        collector.add_new_book('Лес')
+        collector.add_book_in_favorites('Лес')
+        collector.add_new_book('Оно')
+        collector.add_book_in_favorites('Оно')
+        assert collector.get_list_of_favorites_books() == ['Лес', 'Оно']
